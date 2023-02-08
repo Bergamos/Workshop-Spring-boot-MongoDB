@@ -4,6 +4,7 @@ import com.bergamos.workshopmongo.dto.UserDTO;
 import com.bergamos.workshopmongo.entities.User;
 import com.bergamos.workshopmongo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.repository.Update;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -45,6 +46,14 @@ public class UserResource {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Void> update(@RequestBody UserDTO userDTO, @PathVariable String id) {
+        User obj = userService.fromDTO(userDTO);
+        obj.setId(id);
+        obj = userService.update(obj);
         return ResponseEntity.noContent().build();
     }
 
